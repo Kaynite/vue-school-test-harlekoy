@@ -40,11 +40,11 @@ class SyncUpdatedUsers extends Command
             //         'subscribers' => $users->toArray()
             //     ]
             // ]);
-        }
 
-        User::query()
-            ->whereIn('id', $users->pluck('id'))
-            ->update(['is_synced' => true]);
+            User::query()
+                ->whereIn('id', $users->pluck('id'))
+                ->update(['is_synced' => true]);
+        }
 
         $users->each(function (User $user) {
             info("[{$user->id}] firstname: {$user->first_name}, email: {$user->email}, timezone: {$user->timezone}");

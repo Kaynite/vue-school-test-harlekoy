@@ -31,6 +31,7 @@ class SyncUpdatedUsers extends Command
         $users = User::query()
             ->select('id', 'first_name', 'last_name', 'email', 'timezone')
             ->notSynced()
+            ->take(1000) // To limit the number of users to sync
             ->get();
 
         if ($users->isNotEmpty()) {

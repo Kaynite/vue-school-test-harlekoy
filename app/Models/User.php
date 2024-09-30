@@ -3,10 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -21,6 +26,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'timezone',
+        'is_synced',
         'password',
     ];
 
@@ -44,6 +50,12 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_synced' => 'boolean',
         ];
+    }
+
+    public function scopeNotSynced(Builder $query): Builder
+    {
+        return $query->where('is_synced', false);
     }
 }
